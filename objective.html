@@ -6,6 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Henny+Penny&display=swap" rel="stylesheet">
 
 <style>
+
 html, body {
     margin: 0;
     padding: 0;
@@ -26,13 +27,14 @@ body {
     width: 100%;
     aspect-ratio: 16 / 9;
 
-    background-image: url("objective-frame.png");
+    background-image: url("objective%20picture.png");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
-/* This sits ONLY in the blank blue area */
+/* EDITABLE TEXT INSIDE THE BLUE AREA */
+
 .objective-text {
     position: absolute;
 
@@ -69,8 +71,10 @@ body {
 .objective-text:focus {
     background: rgba(255,255,255,.025);
 }
+
 </style>
 </head>
+
 
 <body>
 
@@ -85,21 +89,32 @@ body {
 
 </div>
 
+
 <script>
+
 const objective = document.getElementById("objective");
 
-const saved = localStorage.getItem("mrsColvinObjective");
+/* LOAD YOUR SAVED OBJECTIVE */
+
+const saved =
+    localStorage.getItem("mrsColvinObjective");
 
 if (saved) {
     objective.innerHTML = saved;
 }
 
+
+/* SAVE YOUR OBJECTIVE AS YOU TYPE */
+
 objective.addEventListener("input", function () {
+
     localStorage.setItem(
         "mrsColvinObjective",
         objective.innerHTML
     );
+
 });
+
 </script>
 
 </body>
