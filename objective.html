@@ -23,8 +23,6 @@ body {
     justify-content: center;
 }
 
-/* ORNATE FRAME */
-
 .frame {
     position: relative;
     width: 100%;
@@ -36,19 +34,18 @@ body {
     background-size: contain;
 }
 
-/* NORMAL EDITABLE TEXT BOX */
-
 .objective-text {
     position: absolute;
 
-    left: 14%;
-    width: 72%;
+    /* NARROWER WRITING AREA */
+    left: 19%;
+    width: 62%;
 
     top: 37%;
-    height: 43%;
+    height: 40%;
 
     box-sizing: border-box;
-    padding: 10px 20px;
+    padding: 8px 12px;
 
     border: none;
     outline: none;
@@ -57,12 +54,14 @@ body {
     background: transparent;
 
     font-family: "Henny Penny", fantasy;
-    font-size: clamp(22px, 3.2vw, 48px);
-    line-height: 1.45;
+
+    /* SLIGHTLY SMALLER */
+    font-size: clamp(19px, 2.7vw, 40px);
+
+    line-height: 1.4;
     letter-spacing: 1px;
 
     color: #e4c35a;
-
     text-align: center;
 
     text-shadow:
@@ -87,17 +86,13 @@ body {
     id="objective"
     class="objective-text"
     spellcheck="true"
->I can plan and draft an essay
-in response to a prompt
-using text evidence for support.</textarea>
+>I can plan and draft an essay in response to a prompt using text evidence for support.</textarea>
 
 </div>
 
 <script>
 
 const objective = document.getElementById("objective");
-
-/* LOAD SAVED TEXT */
 
 const savedObjective =
     localStorage.getItem("mrsColvinObjectiveText");
@@ -106,15 +101,11 @@ if (savedObjective !== null) {
     objective.value = savedObjective;
 }
 
-/* SAVE TEXT AND LINE BREAKS */
-
 objective.addEventListener("input", function() {
-
     localStorage.setItem(
         "mrsColvinObjectiveText",
         objective.value
     );
-
 });
 
 </script>
