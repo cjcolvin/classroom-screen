@@ -6,235 +6,121 @@
 
 <style>
 
-* {
-    box-sizing: border-box;
-}
-
 html, body {
     margin: 0;
+    padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     background: transparent;
+    overflow: hidden;
 }
 
 body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: Arial Black, Impact, sans-serif;
 }
 
-/* WHOLE CALENDAR — KEEPS ITS PROPORTIONS */
+/* ENTIRE CALENDAR */
 
 .calendar {
-    width: min(98vw, calc(98vh * 2.75));
-    aspect-ratio: 2.75 / 1;
-
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-
-    gap: 1.2%;
-
-    padding-top: 7%;
-}
-
-
-/* TILE */
-
-.tile {
     position: relative;
 
-    height: 88%;
+    /* Same proportions as our artwork */
+    width: min(100vw, calc(100vh * 3));
+    aspect-ratio: 3 / 1;
 
-    border-radius: 5%;
+    background-image: url("./flipcalander.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+
+/* COMMON TEXT */
+
+.date-text {
+    position: absolute;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    box-shadow:
-        0 6px 8px rgba(0,0,0,.35);
-
-    transform-origin: top center;
-
-    overflow: visible;
-}
-
-
-/* DARK DAY + MONTH TILES */
-
-.dark {
-    width: 20%;
-
-    background:
-        linear-gradient(
-            100deg,
-            #292826,
-            #151515 35%,
-            #242321 100%
-        );
-
-    border: clamp(3px, .5vw, 8px) solid #81543b;
-
-    color: #f0ede4;
-
-    box-shadow:
-        inset 0 0 18px rgba(0,0,0,.8),
-        0 6px 8px rgba(0,0,0,.35);
-}
-
-
-/* CREAM NUMBER TILES */
-
-.light {
-    width: 27%;
-
-    background:
-        linear-gradient(
-            105deg,
-            #eee9dc,
-            #fffdf4 45%,
-            #e9e3d6 100%
-        );
-
-    border: clamp(3px, .5vw, 8px) solid #9a684a;
-
-    color: #111;
-
-    box-shadow:
-        inset 0 0 14px rgba(107,72,46,.18),
-        0 6px 8px rgba(0,0,0,.35);
-}
-
-
-/* DISTRESSED INNER EDGE */
-
-.tile::after {
-    content: "";
-
-    position: absolute;
-    inset: 1.5%;
-
-    border-radius: 4%;
-
-    border: 1px solid rgba(91,52,31,.35);
-
-    pointer-events: none;
-}
-
-
-/* TWO RINGS PER TILE */
-
-.ring {
-    position: absolute;
-
-    top: -18%;
-
-    width: 8%;
-    height: 31%;
-
-    border: clamp(5px, .65vw, 11px) solid #191919;
-
-    border-bottom: none;
-
-    border-radius: 50% 50% 0 0;
-
-    z-index: 5;
-
-    box-shadow:
-        inset 2px 0 2px rgba(255,255,255,.13),
-        2px 2px 3px rgba(0,0,0,.5);
-}
-
-.ring.left {
-    left: 20%;
-}
-
-.ring.right {
-    right: 20%;
-}
-
-
-/* NUMBER TEXT */
-
-.number-text {
     font-family: Impact, "Arial Black", sans-serif;
-
-    font-size: clamp(70px, 17vw, 280px);
-
     font-weight: 900;
 
-    line-height: .8;
-
-    transform: scaleX(.9);
+    text-align: center;
 }
 
 
-/* VERTICAL WORDS */
+/* DAY TILE */
 
-.vertical-text {
-    height: 76%;
+.day {
+    left: 3%;
+    top: 18%;
+    width: 21%;
+    height: 72%;
 
-    display: flex;
     flex-direction: column;
 
-    align-items: center;
-    justify-content: space-evenly;
+    color: #eee9dc;
 
-    font-family: "Arial Black", Impact, sans-serif;
-
-    font-size: clamp(18px, 3.6vw, 62px);
-
-    font-weight: 900;
-
+    font-size: clamp(18px, 4vw, 72px);
     line-height: 1;
 }
 
 
-/* FLIP ANIMATION */
+/* FIRST NUMBER */
 
-.flip {
-    animation: flipCard .65s ease;
-}
+.tens {
+    left: 27%;
+    top: 17%;
+    width: 22%;
+    height: 74%;
 
-@keyframes flipCard {
+    color: #151515;
 
-    0% {
-        transform: rotateX(0deg);
-    }
-
-    45% {
-        transform: rotateX(-82deg);
-    }
-
-    55% {
-        transform: rotateX(-82deg);
-    }
-
-    100% {
-        transform: rotateX(0deg);
-    }
+    font-size: clamp(80px, 18vw, 310px);
+    line-height: 1;
 }
 
 
-/* SLIGHT IMPERFECTION LIKE REAL CARDS */
+/* SECOND NUMBER */
 
-.tile:nth-child(1) {
-    transform: rotate(-1deg);
+.ones {
+    left: 51%;
+    top: 17%;
+    width: 22%;
+    height: 74%;
+
+    color: #151515;
+
+    font-size: clamp(80px, 18vw, 310px);
+    line-height: 1;
 }
 
-.tile:nth-child(2) {
-    transform: rotate(.5deg);
+
+/* MONTH TILE */
+
+.month {
+    left: 76%;
+    top: 18%;
+    width: 21%;
+    height: 72%;
+
+    flex-direction: column;
+
+    color: #eee9dc;
+
+    font-size: clamp(18px, 4vw, 72px);
+    line-height: 1;
 }
 
-.tile:nth-child(3) {
-    transform: rotate(-.4deg);
-}
 
-.tile:nth-child(4) {
-    transform: rotate(.8deg);
+/* LETTER STACKING */
+
+.vertical span {
+    display: block;
 }
 
 </style>
@@ -245,63 +131,24 @@ body {
 
 <div class="calendar">
 
-    <!-- DAY -->
-
-    <div class="tile dark" id="dayTile">
-
-        <span class="ring left"></span>
-        <span class="ring right"></span>
-
-        <div
-            class="vertical-text"
-            id="day">
-        </div>
-
+    <div
+        class="date-text day vertical"
+        id="day">
     </div>
 
-
-    <!-- FIRST NUMBER -->
-
-    <div class="tile light" id="tensTile">
-
-        <span class="ring left"></span>
-        <span class="ring right"></span>
-
-        <div
-            class="number-text"
-            id="tens">
-        </div>
-
+    <div
+        class="date-text tens"
+        id="tens">
     </div>
 
-
-    <!-- SECOND NUMBER -->
-
-    <div class="tile light" id="onesTile">
-
-        <span class="ring left"></span>
-        <span class="ring right"></span>
-
-        <div
-            class="number-text"
-            id="ones">
-        </div>
-
+    <div
+        class="date-text ones"
+        id="ones">
     </div>
 
-
-    <!-- MONTH -->
-
-    <div class="tile dark" id="monthTile">
-
-        <span class="ring left"></span>
-        <span class="ring right"></span>
-
-        <div
-            class="vertical-text"
-            id="month">
-        </div>
-
+    <div
+        class="date-text month vertical"
+        id="month">
     </div>
 
 </div>
@@ -335,105 +182,50 @@ const MONTHS = [
 ];
 
 
-let previous = {};
-
-
-/* PUT EACH LETTER ON ITS OWN LINE */
-
-function verticalLetters(word) {
+function stackLetters(word) {
 
     return word
         .split("")
-        .map(letter => `<span>${letter}</span>`)
+        .map(letter => "<span>" + letter + "</span>")
         .join("");
 }
 
 
-/* FLIP A TILE IF ITS VALUE CHANGED */
-
-function updateTile(tile, element, value, vertical = false) {
-
-    if (previous[element.id] === value) {
-        return;
-    }
-
-    tile.classList.remove("flip");
-
-    void tile.offsetWidth;
-
-    tile.classList.add("flip");
-
-    setTimeout(() => {
-
-        if (vertical) {
-            element.innerHTML =
-                verticalLetters(value);
-        } else {
-            element.textContent =
-                value;
-        }
-
-    }, 290);
-
-
-    previous[element.id] = value;
-}
-
-
-/* UPDATE DATE */
-
 function updateCalendar() {
 
-    const now = new Date();
+    const today = new Date();
 
     const day =
-        DAYS[now.getDay()];
+        DAYS[today.getDay()];
 
     const month =
-        MONTHS[now.getMonth()];
+        MONTHS[today.getMonth()];
 
     const date =
-        String(now.getDate())
+        String(today.getDate())
         .padStart(2, "0");
 
 
-    updateTile(
-        document.getElementById("dayTile"),
-        document.getElementById("day"),
-        day,
-        true
-    );
+    document.getElementById("day").innerHTML =
+        stackLetters(day);
 
+    document.getElementById("tens").textContent =
+        date[0];
 
-    updateTile(
-        document.getElementById("tensTile"),
-        document.getElementById("tens"),
-        date[0]
-    );
+    document.getElementById("ones").textContent =
+        date[1];
 
-
-    updateTile(
-        document.getElementById("onesTile"),
-        document.getElementById("ones"),
-        date[1]
-    );
-
-
-    updateTile(
-        document.getElementById("monthTile"),
-        document.getElementById("month"),
-        month,
-        true
-    );
+    document.getElementById("month").innerHTML =
+        stackLetters(month);
 }
 
 
-/* FIRST LOAD */
+/* Set date when page opens */
 
 updateCalendar();
 
 
-/* CHECK ONCE A MINUTE */
+/* Check periodically in case page stays open overnight */
 
 setInterval(
     updateCalendar,
