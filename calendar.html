@@ -16,7 +16,6 @@ content="width=device-width, initial-scale=1.0">
 
 html,
 body {
-
     margin: 0;
     padding: 0;
 
@@ -28,29 +27,24 @@ body {
     overflow: hidden;
 }
 
-
 body {
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
 }
 
 
-/* =========================================
-   ENTIRE CALENDAR
-   ========================================= */
+/* =====================================
+   CALENDAR
+   ===================================== */
 
 .calendar {
 
     position: relative;
 
     /*
-    Keeps the calendar proportions
-    when the Classroomscreen widget
-    is resized.
+    Keep the exact proportions of
+    the calendar artwork.
     */
 
     width: min(
@@ -60,11 +54,6 @@ body {
 
     aspect-ratio: 3 / 1;
 
-
-    /*
-    YOUR CALENDAR ARTWORK
-    */
-
     background-image:
         url("./flipcalander.png");
 
@@ -72,14 +61,14 @@ body {
 
     background-position: center;
 
-    background-size: contain;
+    background-size: 100% 100%;
 
 }
 
 
-/* =========================================
-   ALL DATE TEXT
-   ========================================= */
+/* =====================================
+   DATE TEXT
+   ===================================== */
 
 .date-text {
 
@@ -98,161 +87,110 @@ body {
     font-weight: 900;
 
     text-align: center;
-
 }
 
 
-/* =========================================
-   DAY OF WEEK
-   ========================================= */
+/* =====================================
+   DAY
+   ===================================== */
 
 .day {
 
     left: 3%;
 
-    top: 18%;
+    top: 22%;
 
     width: 21%;
 
-    height: 72%;
-
+    height: 68%;
 
     flex-direction: column;
 
-    justify-content: center;
-
-
     color: #eee9dc;
-
-
-    /*
-    BIG vertical lettering
-    */
-
-    font-size:
-        min(12vh, 8vw);
-
-    line-height: .9;
-
 }
 
 
-/* =========================================
+/* =====================================
    FIRST NUMBER
-   ========================================= */
+   ===================================== */
 
 .tens {
 
     left: 27%;
 
-    top: 17%;
+    top: 20%;
 
     width: 22%;
 
-    height: 74%;
-
+    height: 70%;
 
     color: #151515;
-
-
-    font-size:
-        clamp(
-            80px,
-            18vw,
-            310px
-        );
-
-    line-height: 1;
-
 }
 
 
-/* =========================================
+/* =====================================
    SECOND NUMBER
-   ========================================= */
+   ===================================== */
 
 .ones {
 
     left: 51%;
 
-    top: 17%;
+    top: 20%;
 
     width: 22%;
 
-    height: 74%;
-
+    height: 70%;
 
     color: #151515;
-
-
-    font-size:
-        clamp(
-            80px,
-            18vw,
-            310px
-        );
-
-    line-height: 1;
-
 }
 
 
-/* =========================================
+/* =====================================
    MONTH
-   ========================================= */
+   ===================================== */
 
 .month {
 
     left: 76%;
 
-    top: 18%;
+    top: 22%;
 
     width: 21%;
 
-    height: 72%;
-
+    height: 68%;
 
     flex-direction: column;
 
-    justify-content: center;
-
-
     color: #eee9dc;
-
-
-    /*
-    BIG vertical lettering
-    */
-
-    font-size:
-        min(12vh, 8vw);
-
-    line-height: .9;
-
 }
 
 
-/* =========================================
-   STACK DAY/MONTH LETTERS
-   ========================================= */
+/* =====================================
+   LETTERS
+   ===================================== */
 
- .vertical span {
+.vertical span {
+
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     width: 100%;
-    height: 24%;
 
-    font-family: "Arial Black", Arial, sans-serif;
+    flex: 1;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
     font-weight: 900;
 
-    font-size: 2.1em;
     line-height: .8;
 
-    transform: scaleX(1.25);
-}
-
+    transform: scaleX(1.35);
 }
 
 </style>
@@ -263,10 +201,10 @@ body {
 <body>
 
 
-<div class="calendar">
+<div
+    class="calendar"
+    id="calendar">
 
-
-    <!-- DAY OF WEEK -->
 
     <div
         class="date-text day vertical"
@@ -274,26 +212,17 @@ body {
     </div>
 
 
-
-    <!-- FIRST DATE NUMBER -->
-
     <div
         class="date-text tens"
         id="tens">
     </div>
 
 
-
-    <!-- SECOND DATE NUMBER -->
-
     <div
         class="date-text ones"
         id="ones">
     </div>
 
-
-
-    <!-- MONTH -->
 
     <div
         class="date-text month vertical"
@@ -308,100 +237,119 @@ body {
 <script>
 
 
-/* =========================================
-   DAY NAMES
-   ========================================= */
-
 const DAYS = [
-
     "SUN",
-
     "MON",
-
     "TUE",
-
     "WED",
-
     "THUR",
-
     "FRI",
-
     "SAT"
-
 ];
 
-
-
-/* =========================================
-   MONTH NAMES
-   ========================================= */
 
 const MONTHS = [
-
     "JAN",
-
     "FEB",
-
     "MAR",
-
     "APR",
-
     "MAY",
-
     "JUN",
-
     "JUL",
-
     "AUG",
-
     "SEP",
-
     "OCT",
-
     "NOV",
-
     "DEC"
-
 ];
 
 
 
-/* =========================================
-   STACK LETTERS VERTICALLY
-   ========================================= */
+const calendar =
+    document.getElementById("calendar");
+
+const dayElement =
+    document.getElementById("day");
+
+const monthElement =
+    document.getElementById("month");
+
+const tensElement =
+    document.getElementById("tens");
+
+const onesElement =
+    document.getElementById("ones");
+
+
 
 function stackLetters(word) {
 
     return word
-
         .split("")
-
         .map(
             letter =>
             "<span>" +
             letter +
             "</span>"
         )
-
         .join("");
-
 }
 
 
 
-/* =========================================
-   UPDATE CALENDAR
-   ========================================= */
+/* =====================================
+   RESPONSIVE FONT SIZING
+
+   IMPORTANT:
+   Font size is based on the CALENDAR,
+   not the Classroomscreen iframe.
+   ===================================== */
+
+function resizeText() {
+
+    const width =
+        calendar.getBoundingClientRect().width;
+
+
+    /*
+    Number size
+    */
+
+    const numberSize =
+        width * 0.155;
+
+    tensElement.style.fontSize =
+        numberSize + "px";
+
+    onesElement.style.fontSize =
+        numberSize + "px";
+
+
+    /*
+    Day/month letter size
+    */
+
+    const letterSize =
+        width * 0.045;
+
+    dayElement.style.fontSize =
+        letterSize + "px";
+
+    monthElement.style.fontSize =
+        letterSize + "px";
+}
+
+
+
+/* =====================================
+   UPDATE DATE
+   ===================================== */
 
 function updateCalendar() {
-
 
     const today =
         new Date();
 
-
-
-    /* DAY */
 
     const day =
         DAYS[
@@ -409,17 +357,11 @@ function updateCalendar() {
         ];
 
 
-
-    /* MONTH */
-
     const month =
         MONTHS[
             today.getMonth()
         ];
 
-
-
-    /* DATE */
 
     const date =
         String(
@@ -431,61 +373,48 @@ function updateCalendar() {
         );
 
 
-
-    /* PUT DAY ON TILE */
-
-    document
-        .getElementById("day")
-        .innerHTML =
+    dayElement.innerHTML =
         stackLetters(day);
 
 
-
-    /* FIRST NUMBER */
-
-    document
-        .getElementById("tens")
-        .textContent =
+    tensElement.textContent =
         date[0];
 
 
-
-    /* SECOND NUMBER */
-
-    document
-        .getElementById("ones")
-        .textContent =
+    onesElement.textContent =
         date[1];
 
 
-
-    /* PUT MONTH ON TILE */
-
-    document
-        .getElementById("month")
-        .innerHTML =
+    monthElement.innerHTML =
         stackLetters(month);
 
+
+    resizeText();
 }
 
 
 
-/* =========================================
-   LOAD TODAY'S DATE
-   ========================================= */
+/* =====================================
+   WATCH FOR CLASSROOMSCREEN RESIZING
+   ===================================== */
+
+const observer =
+    new ResizeObserver(
+        resizeText
+    );
+
+observer.observe(
+    calendar
+);
+
+
+
+/* =====================================
+   START
+   ===================================== */
 
 updateCalendar();
 
-
-
-/*
-Check once every minute.
-
-You don't actually need to watch it
-flip at midnight — this simply makes
-sure it stays correct if the screen
-happens to remain open.
-*/
 
 setInterval(
     updateCalendar,
