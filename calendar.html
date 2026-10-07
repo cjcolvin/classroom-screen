@@ -1,238 +1,505 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <style>
 
-html, body {
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+
     margin: 0;
     padding: 0;
+
     width: 100%;
     height: 100%;
+
     background: transparent;
+
     overflow: hidden;
 }
 
+
 body {
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
 }
 
-/* ENTIRE CALENDAR */
+
+/* =========================================
+   ENTIRE CALENDAR
+   ========================================= */
 
 .calendar {
+
     position: relative;
 
-    /* Same proportions as our artwork */
-    width: min(100vw, calc(100vh * 3));
+    /*
+    Keeps the calendar proportions
+    when the Classroomscreen widget
+    is resized.
+    */
+
+    width: min(
+        100vw,
+        calc(100vh * 3)
+    );
+
     aspect-ratio: 3 / 1;
 
-    background-image: url("./flipcalander.png");
+
+    /*
+    YOUR CALENDAR ARTWORK
+    */
+
+    background-image:
+        url("./flipcalander.png");
+
     background-repeat: no-repeat;
+
     background-position: center;
+
     background-size: contain;
+
 }
 
 
-/* COMMON TEXT */
+/* =========================================
+   ALL DATE TEXT
+   ========================================= */
 
 .date-text {
+
     position: absolute;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    font-family: Impact, "Arial Black", sans-serif;
+    font-family:
+        Impact,
+        "Arial Black",
+        sans-serif;
+
     font-weight: 900;
 
     text-align: center;
+
 }
 
 
-/* DAY TILE */
+/* =========================================
+   DAY OF WEEK
+   ========================================= */
 
 .day {
+
     left: 3%;
+
     top: 18%;
+
     width: 21%;
+
     height: 72%;
+
 
     flex-direction: column;
 
+    justify-content: center;
+
+
     color: #eee9dc;
 
-    font-size: clamp(22px, 5vw, 90px);
-    line-height: 1;
+
+    /*
+    BIG vertical lettering
+    */
+
+    font-size:
+        min(12vh, 8vw);
+
+    line-height: .9;
+
 }
 
 
-/* FIRST NUMBER */
+/* =========================================
+   FIRST NUMBER
+   ========================================= */
 
 .tens {
+
     left: 27%;
+
     top: 17%;
+
     width: 22%;
+
     height: 74%;
+
 
     color: #151515;
 
-    font-size: clamp(80px, 18vw, 310px);
+
+    font-size:
+        clamp(
+            80px,
+            18vw,
+            310px
+        );
+
     line-height: 1;
+
 }
 
 
-/* SECOND NUMBER */
+/* =========================================
+   SECOND NUMBER
+   ========================================= */
 
 .ones {
+
     left: 51%;
+
     top: 17%;
+
     width: 22%;
+
     height: 74%;
+
 
     color: #151515;
 
-    font-size: clamp(80px, 18vw, 310px);
+
+    font-size:
+        clamp(
+            80px,
+            18vw,
+            310px
+        );
+
     line-height: 1;
+
 }
 
 
-/* MONTH TILE */
+/* =========================================
+   MONTH
+   ========================================= */
 
 .month {
+
     left: 76%;
+
     top: 18%;
+
     width: 21%;
+
     height: 72%;
+
 
     flex-direction: column;
 
+    justify-content: center;
+
+
     color: #eee9dc;
 
-    font-size: clamp(22px, 5vw, 90px);
-    line-height: 1;
+
+    /*
+    BIG vertical lettering
+    */
+
+    font-size:
+        min(12vh, 8vw);
+
+    line-height: .9;
+
 }
 
 
-/* LETTER STACKING */
+/* =========================================
+   STACK DAY/MONTH LETTERS
+   ========================================= */
 
 .vertical span {
-    display: block;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+
+    /*
+    Each letter gets a large section
+    of the tile.
+    */
+
+    height: 24%;
+
+    width: 100%;
+
+
+    font-size: 1em;
+
 }
 
 </style>
+
 </head>
 
 
 <body>
 
+
 <div class="calendar">
+
+
+    <!-- DAY OF WEEK -->
 
     <div
         class="date-text day vertical"
         id="day">
     </div>
 
+
+
+    <!-- FIRST DATE NUMBER -->
+
     <div
         class="date-text tens"
         id="tens">
     </div>
+
+
+
+    <!-- SECOND DATE NUMBER -->
 
     <div
         class="date-text ones"
         id="ones">
     </div>
 
+
+
+    <!-- MONTH -->
+
     <div
         class="date-text month vertical"
         id="month">
     </div>
 
+
 </div>
+
 
 
 <script>
 
+
+/* =========================================
+   DAY NAMES
+   ========================================= */
+
 const DAYS = [
+
     "SUN",
+
     "MON",
+
     "TUE",
+
     "WED",
+
     "THUR",
+
     "FRI",
+
     "SAT"
+
 ];
+
+
+
+/* =========================================
+   MONTH NAMES
+   ========================================= */
 
 const MONTHS = [
+
     "JAN",
+
     "FEB",
+
     "MAR",
+
     "APR",
+
     "MAY",
+
     "JUN",
+
     "JUL",
+
     "AUG",
+
     "SEP",
+
     "OCT",
+
     "NOV",
+
     "DEC"
+
 ];
 
+
+
+/* =========================================
+   STACK LETTERS VERTICALLY
+   ========================================= */
 
 function stackLetters(word) {
 
     return word
+
         .split("")
-        .map(letter => "<span>" + letter + "</span>")
+
+        .map(
+            letter =>
+            "<span>" +
+            letter +
+            "</span>"
+        )
+
         .join("");
+
 }
 
+
+
+/* =========================================
+   UPDATE CALENDAR
+   ========================================= */
 
 function updateCalendar() {
 
-    const today = new Date();
+
+    const today =
+        new Date();
+
+
+
+    /* DAY */
 
     const day =
-        DAYS[today.getDay()];
+        DAYS[
+            today.getDay()
+        ];
+
+
+
+    /* MONTH */
 
     const month =
-        MONTHS[today.getMonth()];
+        MONTHS[
+            today.getMonth()
+        ];
+
+
+
+    /* DATE */
 
     const date =
-        String(today.getDate())
-        .padStart(2, "0");
+        String(
+            today.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        );
 
 
-    document.getElementById("day").innerHTML =
+
+    /* PUT DAY ON TILE */
+
+    document
+        .getElementById("day")
+        .innerHTML =
         stackLetters(day);
 
-    document.getElementById("tens").textContent =
+
+
+    /* FIRST NUMBER */
+
+    document
+        .getElementById("tens")
+        .textContent =
         date[0];
 
-    document.getElementById("ones").textContent =
+
+
+    /* SECOND NUMBER */
+
+    document
+        .getElementById("ones")
+        .textContent =
         date[1];
 
-    document.getElementById("month").innerHTML =
+
+
+    /* PUT MONTH ON TILE */
+
+    document
+        .getElementById("month")
+        .innerHTML =
         stackLetters(month);
+
 }
 
 
-/* Set date when page opens */
+
+/* =========================================
+   LOAD TODAY'S DATE
+   ========================================= */
 
 updateCalendar();
 
 
-/* Check periodically in case page stays open overnight */
+
+/*
+Check once every minute.
+
+You don't actually need to watch it
+flip at midnight — this simply makes
+sure it stays correct if the screen
+happens to remain open.
+*/
 
 setInterval(
     updateCalendar,
     60000
 );
 
+
 </script>
 
+
 </body>
+
 </html>
