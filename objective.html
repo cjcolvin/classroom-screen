@@ -23,11 +23,10 @@ body {
     justify-content: center;
 }
 
-/* THE ACTUAL ORNATE FRAME IMAGE */
+/* ORNATE FRAME */
 
 .frame {
     position: relative;
-
     width: 100%;
     height: 100%;
 
@@ -37,32 +36,29 @@ body {
     background-size: contain;
 }
 
-/* EDITABLE OBJECTIVE TEXT */
+
+/* EDITABLE WRITING AREA */
 
 .objective-text {
     position: absolute;
 
-    /* Keeps the text inside the navy writing area */
-    left: 12%;
-    right: 12%;
-    top: 34%;
+    /* Keeps typing inside the open navy portion */
+    left: 13%;
+    right: 13%;
+    top: 35%;
     bottom: 15%;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 15px;
     box-sizing: border-box;
-
-    text-align: center;
+    padding: 10px 20px;
 
     font-family: "Henny Penny", fantasy;
     font-size: clamp(22px, 3.2vw, 48px);
-    line-height: 1.4;
+    line-height: 1.45;
     letter-spacing: 1px;
 
     color: #e4c35a;
+
+    text-align: center;
 
     text-shadow:
         2px 2px 3px #000000,
@@ -72,9 +68,11 @@ body {
     cursor: text;
 
     overflow: hidden;
-}
 
-/* Very subtle indication when you're editing */
+    /* IMPORTANT: preserves your line breaks */
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
 
 .objective-text:focus {
     background: rgba(255,255,255,0.02);
@@ -92,7 +90,9 @@ body {
         class="objective-text"
         contenteditable="true"
         spellcheck="true"
-    >I can plan and draft an essay in response to a prompt using text evidence for support.</div>
+    >I can plan and draft an essay
+in response to a prompt
+using text evidence for support.</div>
 
 </div>
 
@@ -101,7 +101,7 @@ body {
 
 const objective = document.getElementById("objective");
 
-/* Retrieve the objective you previously typed */
+/* LOAD SAVED OBJECTIVE */
 
 const savedObjective =
     localStorage.getItem("mrsColvinObjective");
@@ -110,7 +110,8 @@ if (savedObjective) {
     objective.innerHTML = savedObjective;
 }
 
-/* Automatically save as you type */
+
+/* SAVE AS YOU TYPE */
 
 objective.addEventListener("input", function() {
 
