@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
@@ -14,16 +11,12 @@ content="width=device-width, initial-scale=1.0">
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     margin: 0;
     padding: 0;
-
     width: 100%;
     height: 100%;
-
     background: transparent;
-
     overflow: hidden;
 }
 
@@ -34,208 +27,142 @@ body {
 }
 
 
-/* =====================================
-   CALENDAR
-   ===================================== */
+/* =========================================
+   COMPLETE CALENDAR
+   ========================================= */
 
 .calendar {
-
     position: relative;
 
-    /*
-    Keep the exact proportions of
-    the calendar artwork.
-    */
-
-    width: min(
-        100vw,
-        calc(100vh * 3)
-    );
-
+    width: min(100vw, calc(100vh * 3));
     aspect-ratio: 3 / 1;
 
-    background-image:
-        url("./flipcalander.png");
-
+    background-image: url("./flipcalander.png");
     background-repeat: no-repeat;
-
     background-position: center;
-
     background-size: 100% 100%;
-
 }
 
 
-/* =====================================
-   DATE TEXT
-   ===================================== */
+/* =========================================
+   COMMON TEXT
+   ========================================= */
 
 .date-text {
-
     position: absolute;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
-    font-family:
-        Impact,
-        "Arial Black",
-        sans-serif;
-
+    font-family: Impact, "Arial Black", sans-serif;
     font-weight: 900;
 
     text-align: center;
 }
 
 
-/* =====================================
-   DAY
-   ===================================== */
+/* =========================================
+   DAY TILE
+   ========================================= */
 
 .day {
-
     left: 3%;
-
     top: 22%;
 
     width: 21%;
-
     height: 68%;
 
-    flex-direction: column;
-
     color: #eee9dc;
+
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+
+    letter-spacing: .02em;
 }
 
 
-/* =====================================
+/* =========================================
    FIRST NUMBER
-   ===================================== */
+   ========================================= */
 
 .tens {
-
     left: 27%;
-
     top: 20%;
 
     width: 22%;
-
     height: 70%;
 
     color: #151515;
 }
 
 
-/* =====================================
+/* =========================================
    SECOND NUMBER
-   ===================================== */
+   ========================================= */
 
 .ones {
-
     left: 51%;
-
     top: 20%;
 
     width: 22%;
-
     height: 70%;
 
     color: #151515;
 }
 
 
-/* =====================================
-   MONTH
-   ===================================== */
+/* =========================================
+   MONTH TILE
+   ========================================= */
 
 .month {
-
     left: 76%;
-
     top: 22%;
 
     width: 21%;
-
     height: 68%;
 
-    flex-direction: column;
-
     color: #eee9dc;
-}
 
+    writing-mode: vertical-rl;
+    text-orientation: upright;
 
-/* =====================================
-   LETTERS
-   ===================================== */
-
-.vertical span {
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    width: 100%;
-
-    flex: 1;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    font-weight: 900;
-
-    line-height: .8;
-
-    transform: scaleX(1.35);
+    letter-spacing: .02em;
 }
 
 </style>
-
 </head>
 
 
 <body>
 
-
-<div
-    class="calendar"
-    id="calendar">
-
+<div class="calendar" id="calendar">
 
     <div
-        class="date-text day vertical"
+        class="date-text day"
         id="day">
     </div>
-
 
     <div
         class="date-text tens"
         id="tens">
     </div>
 
-
     <div
         class="date-text ones"
         id="ones">
     </div>
 
-
     <div
-        class="date-text month vertical"
+        class="date-text month"
         id="month">
     </div>
-
 
 </div>
 
 
-
 <script>
-
 
 const DAYS = [
     "SUN",
@@ -246,7 +173,6 @@ const DAYS = [
     "FRI",
     "SAT"
 ];
-
 
 const MONTHS = [
     "JAN",
@@ -264,167 +190,103 @@ const MONTHS = [
 ];
 
 
-
 const calendar =
     document.getElementById("calendar");
 
-const dayElement =
+const day =
     document.getElementById("day");
 
-const monthElement =
-    document.getElementById("month");
-
-const tensElement =
+const tens =
     document.getElementById("tens");
 
-const onesElement =
+const ones =
     document.getElementById("ones");
 
+const month =
+    document.getElementById("month");
 
 
-function stackLetters(word) {
+function updateDate() {
 
-    return word
-        .split("")
-        .map(
-            letter =>
-            "<span>" +
-            letter +
-            "</span>"
-        )
-        .join("");
-}
-
-
-
-/* =====================================
-   RESPONSIVE FONT SIZING
-
-   IMPORTANT:
-   Font size is based on the CALENDAR,
-   not the Classroomscreen iframe.
-   ===================================== */
-
-function resizeText() {
-
-    const width =
-        calendar.getBoundingClientRect().width;
-
-
-    /*
-    Number size
-    */
-
-    const numberSize =
-        width * 0.155;
-
-    tensElement.style.fontSize =
-        numberSize + "px";
-
-    onesElement.style.fontSize =
-        numberSize + "px";
-
-
-    /*
-    Day/month letter size
-    */
-
-    const letterSize =
-        width * 0.045;
-
-    dayElement.style.fontSize =
-        letterSize + "px";
-
-    monthElement.style.fontSize =
-        letterSize + "px";
-}
-
-
-
-/* =====================================
-   UPDATE DATE
-   ===================================== */
-
-function updateCalendar() {
-
-    const today =
-        new Date();
-
-
-    const day =
-        DAYS[
-            today.getDay()
-        ];
-
-
-    const month =
-        MONTHS[
-            today.getMonth()
-        ];
-
+    const today = new Date();
 
     const date =
-        String(
-            today.getDate()
-        )
-        .padStart(
-            2,
-            "0"
-        );
+        String(today.getDate())
+        .padStart(2, "0");
 
+    day.textContent =
+        DAYS[today.getDay()];
 
-    dayElement.innerHTML =
-        stackLetters(day);
-
-
-    tensElement.textContent =
+    tens.textContent =
         date[0];
 
-
-    onesElement.textContent =
+    ones.textContent =
         date[1];
 
-
-    monthElement.innerHTML =
-        stackLetters(month);
-
+    month.textContent =
+        MONTHS[today.getMonth()];
 
     resizeText();
 }
 
 
+function resizeText() {
 
-/* =====================================
-   WATCH FOR CLASSROOMSCREEN RESIZING
-   ===================================== */
+    /*
+    Everything is based on the actual
+    rendered CALENDAR width.
+    */
+
+    const w =
+        calendar.getBoundingClientRect().width;
+
+
+    /* Giant numbers */
+
+    const numberSize =
+        w * 0.155;
+
+    tens.style.fontSize =
+        numberSize + "px";
+
+    ones.style.fontSize =
+        numberSize + "px";
+
+
+    /* Day + month */
+
+    const wordSize =
+        w * 0.050;
+
+    day.style.fontSize =
+        wordSize + "px";
+
+    month.style.fontSize =
+        wordSize + "px";
+}
+
+
+/* Watch Classroomscreen resizing */
 
 const observer =
-    new ResizeObserver(
-        resizeText
-    );
+    new ResizeObserver(resizeText);
 
-observer.observe(
-    calendar
-);
+observer.observe(calendar);
 
 
+/* Start */
 
-/* =====================================
-   START
-   ===================================== */
+updateDate();
 
-updateCalendar();
 
+/* Keep date current */
 
 setInterval(
-    updateCalendar,
+    updateDate,
     60000
 );
 
-
 </script>
 
-
 </body>
-
 </html>
