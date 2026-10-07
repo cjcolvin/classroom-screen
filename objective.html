@@ -23,6 +23,8 @@ body {
     justify-content: center;
 }
 
+/* ORNATE OBJECTIVE FRAME */
+
 .frame {
     position: relative;
     width: 100%;
@@ -34,29 +36,38 @@ body {
     background-size: contain;
 }
 
+
+/* EDITABLE OBJECTIVE BOX */
+
 .objective-text {
     position: absolute;
 
-    left: 19%;
-    width: 62%;
+    /* KEEP THESE DIMENSIONS */
+    left: 18%;
+    width: 64%;
 
-    top: 37%;
-    height: 40%;
+    top: 34%;
+    height: 48%;
 
     box-sizing: border-box;
-    padding: 8px 12px;
+    padding: 8px 10px;
 
     border: none;
     outline: none;
     resize: none;
+
     background: transparent;
 
     font-family: "Henny Penny", fantasy;
-    font-size: 86px;
-    line-height: 1.35;
+
+    /* START LARGE */
+    font-size: 120px;
+
+    line-height: 1.18;
     letter-spacing: 1px;
 
     color: #e4c35a;
+
     text-align: center;
 
     text-shadow:
@@ -66,28 +77,33 @@ body {
     overflow: hidden;
 }
 
-/* Invisible box used only to measure the text */
+
+/* HIDDEN COPY USED TO MEASURE TEXT */
 
 .measure {
     position: absolute;
+
     visibility: hidden;
     pointer-events: none;
 
-    left: 19%;
-    width: 62%;
+    width: 64%;
 
     box-sizing: border-box;
-    padding: 8px 12px;
+    padding: 8px 10px;
 
     font-family: "Henny Penny", fantasy;
-    font-size: 56px;
-    line-height: 1.35;
+
+    font-size: 120px;
+
+    line-height: 1.18;
     letter-spacing: 1px;
 
     text-align: center;
+
     white-space: pre-wrap;
     overflow-wrap: break-word;
 }
+
 
 .objective-text:focus {
     background: rgba(255,255,255,0.02);
@@ -96,25 +112,35 @@ body {
 </style>
 </head>
 
+
 <body>
 
 <div class="frame">
 
-    <textarea
-        id="objective"
-        class="objective-text"
-        spellcheck="true"
-    >I can plan and draft an essay in response to a prompt using text evidence for support.</textarea>
+<textarea
+    id="objective"
+    class="objective-text"
+    spellcheck="true"
+>I can plan and draft an essay in response to a prompt using text evidence for support.</textarea>
 
-    <div id="measure" class="measure"></div>
+<div
+    id="measure"
+    class="measure">
+</div>
 
 </div>
 
 
 <script>
 
-const objective = document.getElementById("objective");
-const measure = document.getElementById("measure");
+const objective =
+    document.getElementById("objective");
+
+const measure =
+    document.getElementById("measure");
+
+
+/* LOAD YOUR SAVED OBJECTIVE */
 
 const savedObjective =
     localStorage.getItem("mrsColvinObjectiveText");
@@ -124,62 +150,80 @@ if (savedObjective !== null) {
 }
 
 
+/* AUTOMATIC FONT FITTING */
+
 function fitObjective() {
 
-    /* START BIG */
-    let size = 86;
+    /*
+    Always try the large size first.
+    It will shrink ONLY if the text
+    needs more room.
+    */
 
-    const minimumSize = 22;
+    let size = 120;
 
-    measure.textContent = objective.value + "\n";
+    const minimumSize = 24;
 
-    while (size >= minimumSize) {
+    measure.textContent = objective.value;
 
-        measure.style.fontSize = size + "px";
+    while (size > minimumSize) {
 
-        /*
-        Available height of the visible writing area
-        */
-        const availableHeight =
-            objective.clientHeight;
+        measure.style.fontSize =
+            size + "px";
 
-        /*
-        If our invisible copy fits,
-        this is the largest usable size.
-        */
-        if (measure.scrollHeight <= availableHeight) {
+        if (
+            measure.scrollHeight <=
+            objective.clientHeight
+        ) {
             break;
         }
 
         size--;
     }
 
-    objective.style.fontSize = size + "px";
+    objective.style.fontSize =
+        size + "px";
 }
 
 
-objective.addEventListener("input", function() {
+/* SAVE + REFIT WHILE YOU TYPE */
 
-    localStorage.setItem(
-        "mrsColvinObjectiveText",
-        objective.value
-    );
+objective.addEventListener(
+    "input",
+    function() {
 
-    fitObjective();
+        localStorage.setItem(
+            "mrsColvinObjectiveText",
+            objective.value
+        );
 
-});
-
-
-window.addEventListener("resize", fitObjective);
-
-
-window.addEventListener("load", function() {
-
-    document.fonts.ready.then(function() {
         fitObjective();
-    });
+    }
+);
 
-});
+
+/* REFIT IF YOU RESIZE THE WIDGET */
+
+window.addEventListener(
+    "resize",
+    fitObjective
+);
+
+
+/* FIT WHEN THE PAGE FIRST OPENS */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        document.fonts.ready.then(
+            function() {
+                fitObjective();
+            }
+        );
+
+    }
+);
 
 </script>
 
