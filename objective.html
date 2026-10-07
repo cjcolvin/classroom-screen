@@ -37,7 +37,6 @@ body {
 .objective-text {
     position: absolute;
 
-    /* Keep text safely inside the ornate frame */
     left: 19%;
     width: 62%;
 
@@ -53,10 +52,7 @@ body {
     background: transparent;
 
     font-family: "Henny Penny", fantasy;
-
-    /* JavaScript will automatically adjust this */
-    font-size: 48px;
-
+    font-size: 56px;
     line-height: 1.35;
     letter-spacing: 1px;
 
@@ -70,6 +66,29 @@ body {
     overflow: hidden;
 }
 
+/* Invisible box used only to measure the text */
+
+.measure {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+
+    left: 19%;
+    width: 62%;
+
+    box-sizing: border-box;
+    padding: 8px 12px;
+
+    font-family: "Henny Penny", fantasy;
+    font-size: 56px;
+    line-height: 1.35;
+    letter-spacing: 1px;
+
+    text-align: center;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
 .objective-text:focus {
     background: rgba(255,255,255,0.02);
 }
@@ -81,17 +100,21 @@ body {
 
 <div class="frame">
 
-<textarea
-    id="objective"
-    class="objective-text"
-    spellcheck="true"
->I can plan and draft an essay in response to a prompt using text evidence for support.</textarea>
+    <textarea
+        id="objective"
+        class="objective-text"
+        spellcheck="true"
+    >I can plan and draft an essay in response to a prompt using text evidence for support.</textarea>
+
+    <div id="measure" class="measure"></div>
 
 </div>
+
 
 <script>
 
 const objective = document.getElementById("objective");
+const measure = document.getElementById("measure");
 
 const savedObjective =
     localStorage.getItem("mrsColvinObjectiveText");
@@ -101,31 +124,39 @@ if (savedObjective !== null) {
 }
 
 
-/* AUTOMATIC FONT SIZING */
-
 function fitObjective() {
 
-    /* Start nice and large */
-    let fontSize = 48;
+    /* START BIG */
+    let size = 56;
 
-    objective.style.fontSize = fontSize + "px";
+    const minimumSize = 22;
 
-    /*
-       If the text doesn't fit, shrink it
-       one pixel at a time until it does.
-    */
+    measure.textContent = objective.value + "\n";
 
-    while (
-        objective.scrollHeight > objective.clientHeight &&
-        fontSize > 22
-    ) {
-        fontSize--;
-        objective.style.fontSize = fontSize + "px";
+    while (size >= minimumSize) {
+
+        measure.style.fontSize = size + "px";
+
+        /*
+        Available height of the visible writing area
+        */
+        const availableHeight =
+            objective.clientHeight;
+
+        /*
+        If our invisible copy fits,
+        this is the largest usable size.
+        */
+        if (measure.scrollHeight <= availableHeight) {
+            break;
+        }
+
+        size--;
     }
+
+    objective.style.fontSize = size + "px";
 }
 
-
-/* SAVE + RESIZE WHEN YOU TYPE */
 
 objective.addEventListener("input", function() {
 
@@ -139,16 +170,11 @@ objective.addEventListener("input", function() {
 });
 
 
-/* Resize again if the window/widget changes size */
-
 window.addEventListener("resize", fitObjective);
 
 
-/* Size correctly when page first opens */
-
 window.addEventListener("load", function() {
 
-    /* Give the Google font a moment to load */
     document.fonts.ready.then(function() {
         fitObjective();
     });
