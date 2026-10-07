@@ -23,26 +23,35 @@ body {
     justify-content: center;
 }
 
-/* ORNATE OBJECTIVE FRAME */
+/*
+EVERYTHING lives inside this container.
+It always keeps the same proportions as
+the original frame image.
+*/
 
 .frame {
     position: relative;
-    width: 100%;
-    height: 100%;
+
+    width: min(100vw, calc(100vh * 1.7778));
+    height: min(100vh, calc(100vw / 1.7778));
 
     background-image: url("./Objectiveframe.png");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;
+    background-size: 100% 100%;
 }
 
 
-/* EDITABLE OBJECTIVE BOX */
+/* EDITABLE OBJECTIVE */
 
 .objective-text {
     position: absolute;
 
-    /* KEEP THESE DIMENSIONS */
+    /*
+    These percentages are now based on
+    THE FRAME — not the whole widget.
+    */
+
     left: 18%;
     width: 64%;
 
@@ -50,7 +59,8 @@ body {
     height: 48%;
 
     box-sizing: border-box;
-    padding: 8px 10px;
+
+    padding: 1%;
 
     border: none;
     outline: none;
@@ -60,11 +70,18 @@ body {
 
     font-family: "Henny Penny", fantasy;
 
-    /* START LARGE */
-    font-size: 120px;
+    /*
+    Responsive starting size.
+    This grows/shrinks WITH the frame.
+    */
+    font-size: clamp(
+        24px,
+        6.5vw,
+        120px
+    );
 
     line-height: 1.18;
-    letter-spacing: 1px;
+    letter-spacing: 0.05em;
 
     color: #e4c35a;
 
@@ -78,7 +95,7 @@ body {
 }
 
 
-/* HIDDEN COPY USED TO MEASURE TEXT */
+/* INVISIBLE MEASURING COPY */
 
 .measure {
     position: absolute;
@@ -86,17 +103,16 @@ body {
     visibility: hidden;
     pointer-events: none;
 
+    left: 18%;
     width: 64%;
 
     box-sizing: border-box;
-    padding: 8px 10px;
+    padding: 1%;
 
     font-family: "Henny Penny", fantasy;
 
-    font-size: 120px;
-
     line-height: 1.18;
-    letter-spacing: 1px;
+    letter-spacing: 0.05em;
 
     text-align: center;
 
@@ -115,7 +131,7 @@ body {
 
 <body>
 
-<div class="frame">
+<div class="frame" id="frame">
 
 <textarea
     id="objective"
@@ -139,8 +155,11 @@ const objective =
 const measure =
     document.getElementById("measure");
 
+const frame =
+    document.getElementById("frame");
 
-/* LOAD YOUR SAVED OBJECTIVE */
+
+/* LOAD SAVED OBJECTIVE */
 
 const savedObjective =
     localStorage.getItem("mrsColvinObjectiveText");
@@ -150,26 +169,45 @@ if (savedObjective !== null) {
 }
 
 
-/* AUTOMATIC FONT FITTING */
+/*
+AUTOMATIC RESPONSIVE FONT FITTING
+*/
 
 function fitObjective() {
 
     /*
-    Always try the large size first.
-    It will shrink ONLY if the text
-    needs more room.
+    Maximum font size is calculated
+    from the ACTUAL frame width.
     */
 
-    let size = 120;
+    const frameWidth =
+        frame.getBoundingClientRect().width;
 
-    const minimumSize = 24;
+    let size =
+        frameWidth * 0.065;
 
-    measure.textContent = objective.value;
+    /*
+    Prevent ridiculous sizes at either end.
+    */
+
+    size = Math.min(size, 120);
+
+    const minimumSize =
+        Math.max(14, frameWidth * 0.025);
+
+
+    measure.textContent =
+        objective.value || " ";
+
 
     while (size > minimumSize) {
 
         measure.style.fontSize =
             size + "px";
+
+        /*
+        Match measuring box to textarea.
+        */
 
         if (
             measure.scrollHeight <=
@@ -181,12 +219,13 @@ function fitObjective() {
         size--;
     }
 
+
     objective.style.fontSize =
         size + "px";
 }
 
 
-/* SAVE + REFIT WHILE YOU TYPE */
+/* SAVE + RESIZE WHILE TYPING */
 
 objective.addEventListener(
     "input",
@@ -202,15 +241,21 @@ objective.addEventListener(
 );
 
 
-/* REFIT IF YOU RESIZE THE WIDGET */
+/*
+THIS IS THE IMPORTANT PART:
+Every time Classroomscreen changes
+the widget size, recalculate everything.
+*/
 
-window.addEventListener(
-    "resize",
-    fitObjective
-);
+const resizeObserver =
+    new ResizeObserver(function() {
+        fitObjective();
+    });
+
+resizeObserver.observe(frame);
 
 
-/* FIT WHEN THE PAGE FIRST OPENS */
+/* INITIAL LOAD */
 
 window.addEventListener(
     "load",
