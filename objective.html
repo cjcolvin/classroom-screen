@@ -37,7 +37,7 @@ body {
 .objective-text {
     position: absolute;
 
-    /* NARROWER WRITING AREA */
+    /* Keep text safely inside the ornate frame */
     left: 19%;
     width: 62%;
 
@@ -50,15 +50,14 @@ body {
     border: none;
     outline: none;
     resize: none;
-
     background: transparent;
 
     font-family: "Henny Penny", fantasy;
 
-    /* SLIGHTLY SMALLER */
-    font-size: clamp(19px, 2.7vw, 40px);
+    /* JavaScript will automatically adjust this */
+    font-size: 48px;
 
-    line-height: 1.4;
+    line-height: 1.35;
     letter-spacing: 1px;
 
     color: #e4c35a;
@@ -101,11 +100,59 @@ if (savedObjective !== null) {
     objective.value = savedObjective;
 }
 
+
+/* AUTOMATIC FONT SIZING */
+
+function fitObjective() {
+
+    /* Start nice and large */
+    let fontSize = 48;
+
+    objective.style.fontSize = fontSize + "px";
+
+    /*
+       If the text doesn't fit, shrink it
+       one pixel at a time until it does.
+    */
+
+    while (
+        objective.scrollHeight > objective.clientHeight &&
+        fontSize > 22
+    ) {
+        fontSize--;
+        objective.style.fontSize = fontSize + "px";
+    }
+}
+
+
+/* SAVE + RESIZE WHEN YOU TYPE */
+
 objective.addEventListener("input", function() {
+
     localStorage.setItem(
         "mrsColvinObjectiveText",
         objective.value
     );
+
+    fitObjective();
+
+});
+
+
+/* Resize again if the window/widget changes size */
+
+window.addEventListener("resize", fitObjective);
+
+
+/* Size correctly when page first opens */
+
+window.addEventListener("load", function() {
+
+    /* Give the Google font a moment to load */
+    document.fonts.ready.then(function() {
+        fitObjective();
+    });
+
 });
 
 </script>
