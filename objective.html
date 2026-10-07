@@ -36,20 +36,25 @@ body {
     background-size: contain;
 }
 
-
-/* EDITABLE WRITING AREA */
+/* NORMAL EDITABLE TEXT BOX */
 
 .objective-text {
     position: absolute;
 
-    /* Keeps typing inside the open navy portion */
-    left: 13%;
-    right: 13%;
-    top: 35%;
-    bottom: 15%;
+    left: 14%;
+    width: 72%;
+
+    top: 37%;
+    height: 43%;
 
     box-sizing: border-box;
     padding: 10px 20px;
+
+    border: none;
+    outline: none;
+    resize: none;
+
+    background: transparent;
 
     font-family: "Henny Penny", fantasy;
     font-size: clamp(22px, 3.2vw, 48px);
@@ -64,14 +69,7 @@ body {
         2px 2px 3px #000000,
         0 0 6px rgba(228,195,90,0.35);
 
-    outline: none;
-    cursor: text;
-
     overflow: hidden;
-
-    /* IMPORTANT: preserves your line breaks */
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
 }
 
 .objective-text:focus {
@@ -85,39 +83,36 @@ body {
 
 <div class="frame">
 
-    <div
-        id="objective"
-        class="objective-text"
-        contenteditable="true"
-        spellcheck="true"
-    >I can plan and draft an essay
+<textarea
+    id="objective"
+    class="objective-text"
+    spellcheck="true"
+>I can plan and draft an essay
 in response to a prompt
-using text evidence for support.</div>
+using text evidence for support.</textarea>
 
 </div>
-
 
 <script>
 
 const objective = document.getElementById("objective");
 
-/* LOAD SAVED OBJECTIVE */
+/* LOAD SAVED TEXT */
 
 const savedObjective =
-    localStorage.getItem("mrsColvinObjective");
+    localStorage.getItem("mrsColvinObjectiveText");
 
-if (savedObjective) {
-    objective.innerHTML = savedObjective;
+if (savedObjective !== null) {
+    objective.value = savedObjective;
 }
 
-
-/* SAVE AS YOU TYPE */
+/* SAVE TEXT AND LINE BREAKS */
 
 objective.addEventListener("input", function() {
 
     localStorage.setItem(
-        "mrsColvinObjective",
-        objective.innerHTML
+        "mrsColvinObjectiveText",
+        objective.value
     );
 
 });
